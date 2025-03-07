@@ -19,7 +19,7 @@ class HUSFORMERModel(nn.Module):
 
         combined_dim = 30     
         output_dim = hyp_params.output_dim        
-        self.channels = hyp_params.m1_len+hyp_params.m2_len+hyp_params.m3_len+hyp_params.m4_len
+        self.channels = hyp_params.m1_len+hyp_params.m2_len+hyp_params.m3_len+hyp_params.m4_len+hyp_params.m5_len+hyp_params.m6_len+hyp_params.m7_len+hyp_params.m8_len
         
         # 1. Temporal convolutional layers
         self.proj_m1 = nn.Conv1d(self.orig_d_m1, self.d_m, kernel_size=1, padding=0, bias=False)
@@ -50,14 +50,14 @@ class HUSFORMERModel(nn.Module):
 
         
         # 3. Self Attentions 
-        self.trans_final = self.get_network(self_type='policy', layers=5)
+        self.trans_final = self.get_network(self_type='policy', layers=9)
         
         # 4. Projection layers
         self.proj1 = self.proj2 = nn.Linear(combined_dim, combined_dim)
         self.out_layer = nn.Linear(combined_dim, output_dim)
 
     def get_network(self, self_type='l', layers=-1):
-        if self_type in ['m1_all','m2_all','m3_all','m4_all','m5_all', 'm6_all', 'm7_all', 'm8_all' ,policy']:
+        if self_type in ['m1_all','m2_all','m3_all','m4_all','m5_all', 'm6_all', 'm7_all', 'm8_all' ,'policy']:
             embed_dim, attn_dropout = self.d_m, self.attn_dropout
         else:
             raise ValueError("Unknown network type")
